@@ -1,11 +1,11 @@
 import mysql.connector
-
+import credentials
 # global cursor
 # global conn
 
 # def connect():
 # establishing the connection
-conn = mysql.connector.connect(user='root', password='root', host='127.0.0.1', auth_plugin='mysql_native_password')
+conn = mysql.connector.connect(user='root', password=credentials.PASSWORD, host='127.0.0.1', auth_plugin='mysql_native_password')
 # Creating a cursor object using the cursor() method
 cursor = conn.cursor()
 
@@ -140,7 +140,9 @@ def insert():
                     ('Meg', 'Griffin', '1989-01-01', 'female', 'MGriffin66@yahoo.com', '605-342-6529', 63, 133,
                      '28 Spruce Drive', '382-99-4658'),
                     ('Elvis', 'Myers', '1982-12-31', 'male', 'FatBoySlim@compuserve.com', '778-965-4215', 74, 239,
-                     '2 Redwood Place', '956-43-1614')
+                     '2 Redwood Place', '956-43-1614'),
+                    ('Dummy', 'Entry', '1982-01-31', 'male', 'DummyEntry@compuserve.com', '778-963-3315', 70, 230,
+                     '1 Redwood Place', '956-23-1714')
                     ]
 
     doctor_insert_stmt = "INSERT INTO Doctor (firstName, lastName, birthDate, gender, email, phoneNumber, weight, height, address, hospitalName, consultationCost) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
@@ -161,7 +163,8 @@ def insert():
     room_insert_stmt = "INSERT INTO Room (roomID, roomName, type, roomDescription, hospitalName, roomCost) VALUES (%s, %s, %s, %s, %s, %s)"
     room_data = [(101, 'The Ward', 'Ward', 'It\'s the Ward', 'Test Hospital', 100.00),
                  (102, 'Jerry', 'ICU', 'Intensive care unit', 'Test Hospital', 250.00),
-                 (103, 'RoomName?', 'Operating Theater', 'Operations happen here', 'Test Hospital', 1000.00)]
+                 (103, 'RoomName?', 'Operating Theater', 'Operations happen here', 'Test Hospital', 1000.00),
+                 (104, 'DummyEntry', 'DummyRoom', 'Will use it to delete', 'Dummy Hospital', 0.0)]
     #
     room_ass_insert_stmt = "INSERT INTO RoomAssignments (staffID, roomID) VALUES (%s, %s)"
     room_ass_data = [(1, 101),

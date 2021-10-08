@@ -1,7 +1,7 @@
 import mysql.connector
-
+import credentials
 # establishing the connection
-conn = mysql.connector.connect(user='root', password='root', host='127.0.0.1', database='HospitalManagementSystem')
+conn = mysql.connector.connect(user='root', password=credentials.PASSWORD, host='127.0.0.1', database='HospitalManagementSystem')
 # Creating a cursor object using the cursor() method
 cursor = conn.cursor()
 
@@ -22,6 +22,28 @@ def view_by_email(email):
     sql = "SELECT * FROM Patient WHERE LOWER(email) LIKE %" + email + "%"
     cursor.execute(sql)
     return cursor.fetchall()
+
+
+def update_patient(height, weight, pid):
+    sql = "Update Patient SET height = %s, weight = %s WHERE patientID = %s" % (height, weight, pid)
+    try:
+        cursor.execute(sql)
+        conn.commit()
+        return True
+    except:
+        conn.rollback()
+        return False
+
+
+def delete_patient(pid):
+    sql = "DELETE FROM Patient WHERE patientID = %s" % pid
+    try:
+        cursor.execute(sql)
+        conn.commit()
+        return True
+    except:
+        conn.rollback()
+        return False
 
 
 def get_contact_info_by_fname(username, password, fname):

@@ -3,6 +3,7 @@ import PySimpleGUI as sg
 import common
 import db_init
 import patient
+import room
 import user
 import login
 import treatment
@@ -11,10 +12,12 @@ db_init.create()
 
 # ----------- Create the layouts this Window will display -----------
 layoutMain = [[sg.Button('Admin'), sg.Button('User')]]
-layoutAdmin = [[sg.Button('Manage')],
-               [sg.Button('Administration')]]
+# layoutAdmin = [[sg.]]
+layoutAdminLogin = [[sg.Button('Manage')],
+                    [sg.Button('Administration')]]
 layoutManage = [[sg.Button('View Number of Records in each table', key='ViewNum')],
-                [sg.Button('Manage Patients')],
+                [sg.Button('Manage Tables')],
+                # [sg.Button('Manage Patients')],
                 # [sg.Button('Manage Doctors')],
                 # [sg.Button('Manage OutPatient Appointments')],
                 # [sg.Button('Manage InPatient Appointments')],
@@ -34,11 +37,12 @@ layoutViewNum = [[sg.Text(key='PatientNum')],
                  [sg.Text(key='TreatmentNum')],
                  [sg.Text(key='AppointmentNum')],
                  [sg.Text(key='BillNum')]]
-layoutManagePatient = [[sg.Button('View Patients')],
-                       [sg.Button('Add Patient')],
-                       [sg.Button('Update Patient')],
-                       [sg.Button('Delete Patient')],
-                       [sg.Button('Back to Admin Menu')]]
+# layoutManagePatient = [[sg.Button('View Patients')],
+#     #                    [sg.Button('Add Patient')],
+#     #                    [sg.Button('Update Patient')],
+#     #                    [sg.Button('Delete Patient')],
+#                        [sg.Button('Back to Admin Menu')]
+# ]
 layoutManageDoctor = [[sg.Button('View Doctors')],
                       [sg.Button('Add Doctor')],
                       [sg.Button('Update Doctor')],
@@ -120,23 +124,74 @@ layoutGrantPermissions = [[sg.Text('Enter Username'), sg.Input(key='-InputUserna
                           [sg.Button('Grant')],
                           [sg.Text(key='-GrantError-', text_color='Red', font=('Helvetica', 15))],
                           [sg.Text(key='-GrantSuccess-', text_color='Lightgreen', font=('Helvetica', 15))]]
-layoutViewPatients = [[sg.Button('View All')],
-                      [sg.Button('View By ID')],
-                      [sg.Button('View By Email')]]
+# layoutViewPatients = [[sg.Button('View All')],
+#                       [sg.Button('View By ID')],
+#                       [sg.Button('View By Email')]]
+
+viewpatientsdata = [
+    [1, "abc", "def", "2021-10-21", "Male", "abc@gmail.com", "605098765", 169, 150, "SD-57069", "234-45-456"]]
+viewpatientsheading = ["Patient ID", "First Name", "Last Name", "Birst Date", "Gender", "Email", "Phone Number",
+                       "Height (cm)", "Weight (pounds)", "Address", "SSN"]
+viewroomdata = [[101, "abc", "ed", "ed", "ed", 100.00]]
+viewroomhead = ["Room ID", "Room Name", "Room Type", "Room Description", "Hospital Name", "Room Cost"]
+layoutManageTables = [[sg.Text('Choose Table to update or delete:')],
+                      [sg.Radio('Patient', 1, key='Patient', enable_events=True)],
+                      # [sg.Radio('Doctor', 1, key='Doctor', enable_events=True)],
+                      # [sg.Radio('Staff', 1, key='Staff', enable_events=True)],
+                      [sg.Radio('Room', 1, key='Room', enable_events=True)],
+                      # [sg.Radio('Room Assignments', 1, key='RoomAssignments', enable_events=True)],
+                      # [sg.Radio('Disease', 1, key='Disease', enable_events=True)],
+                      # [sg.Radio('Treatment', 1, key='Treatment', enable_events=True)],
+                      # [sg.Radio('Appointment', 1, key='Appointment', enable_events=True)],
+                      # [sg.Radio('Bill', 1, key='Bill', enable_events=True)],
+                      [sg.Table(values=viewpatientsdata, headings=viewpatientsheading,
+                                # max_col_width=25,
+                                background_color='black',
+                                auto_size_columns=True,
+                                # display_row_numbers=True,
+                                justification='right',
+                                num_rows=0,
+                                alternating_row_color='black',
+                                key='-viewpatienttable-',
+                                row_height=25, visible=False)],
+                      [sg.Table(values=viewroomdata, headings=viewroomhead,
+                                # max_col_width=25,
+                                background_color='black',
+                                auto_size_columns=True,
+                                # display_row_numbers=True,
+                                justification='right',
+                                num_rows=0,
+                                alternating_row_color='black',
+                                key='-viewroomtable-',
+                                row_height=25, visible=False)],
+                      [sg.Text('Enter ID to update or delete:', key="idupdel", visible=False),
+                       sg.Input(key='-PRID-', visible=False), sg.Button('Update', key='BtnUpdate', visible=False),
+                       sg.Button('Delete', key='BtnDelete', visible=False)],
+                      [sg.Text('Enter height:', key='upheight', visible=False),
+                       sg.Input(key="upheightinput", visible=False)],
+                      [sg.Text('Enter weight:', key='upweight', visible=False),
+                       sg.Input(key="upweightinput", visible=False)],
+                      [sg.Button('Update', key="BtnUpdateP", visible=False)],
+                      [sg.Text('Enter room cost:', key='uprcost', visible=False),
+                       sg.Input(key="uprcostinput", visible=False)],
+                      [sg.Button('Update', key='BtnUpdateR', visible=False)],
+                      [sg.Text(key="updelerror", text_color="Red")],
+                      [sg.Text(key="updelsuccess", text_color="Lightgreen")]]
 treatmentorderdata = [["abc", "def", "ghi", "jkl", 0.5]]
 treatmentorderheadings = ["Treatment Name", "Treatment Description", "treatment Cost", "Disease Name", "Death Rate"]
-layoutViewTreatmentsOrder = [[sg.Text('Treatments by ordering treatment cost in ascending and death rate in descending')],
-                             [sg.Text('', key='-messtreatorder-', font=('Helvetica', 15))],
-                             [sg.Table(values=treatmentorderdata, headings=treatmentorderheadings,
-                                       # max_col_width=25,
-                                       background_color='black',
-                                       auto_size_columns=True,
-                                       # display_row_numbers=True,
-                                       justification='right',
-                                       num_rows=0,
-                                       alternating_row_color='black',
-                                       key='-treatordertable-',
-                                       row_height=25, visible=False)]]
+layoutViewTreatmentsOrder = [
+    [sg.Text('Treatments by ordering treatment cost in ascending and death rate in descending')],
+    [sg.Text('', key='-messtreatorder-', font=('Helvetica', 15))],
+    [sg.Table(values=treatmentorderdata, headings=treatmentorderheadings,
+              # max_col_width=25,
+              background_color='black',
+              auto_size_columns=True,
+              # display_row_numbers=True,
+              justification='right',
+              num_rows=0,
+              alternating_row_color='black',
+              key='-treatordertable-',
+              row_height=25, visible=False)]]
 
 # user layouts
 layoutUser = [[sg.Text('Enter Username'), sg.Input(key='-InputUsernameLogin-')],
@@ -212,7 +267,7 @@ layoutViewPatAgeUser = [
               alternating_row_color='black',
               key='-patagetable-',
               row_height=25, visible=False)]
-    ]
+]
 # [psg.Text('Choose your Toppings',size=(20, 1), font='Lucida',justification='left')],
 # [psg.Checkbox('Pepperoni',key='Pepperoni'), psg.Checkbox('Mushroom',key='Mushroom'),
 #  psg.Checkbox('Corn',key='Corn'),psg.Checkbox('Cherry Tomatoes',key='Cherry Tomatoes'),psg.Checkbox('Olives',key='Olives')],
@@ -220,9 +275,10 @@ layoutViewPatAgeUser = [
 # ----------- Create actual layout using Columns and a row of Buttons
 layout = [
     [sg.Text("Welcome to Hospital Management System", font=('Helvetica', 30), justification='center', key='-MESS-')],
-    [sg.Column(layoutMain, key='-COLMain-'), sg.Column(layoutAdmin, visible=False, key='-COLAdmin-'),
+    [sg.Column(layoutMain, key='-COLMain-'), sg.Column(layoutAdminLogin, visible=False, key='-COLAdmin-'),
      sg.Column(layoutUser, visible=False, key='-COLUser-'), sg.Column(layoutManage, visible=False, key='-COLManage-'),
-     sg.Column(layoutManagePatient, visible=False, key='-COLManagePatients-'),
+     # sg.Column(layoutManagePatient, visible=False, key='-COLManagePatients-'),
+     sg.Column(layoutManageTables, visible=False, key='-COLManageTables-'),
      sg.Column(layoutManageDoctor, visible=False, key='-COLManageDoctors-'),
      sg.Column(layoutManageOutPatientApp, visible=False, key='-COLManageOutPatientAppointments-'),
      sg.Column(layoutManageInPatientApp, visible=False, key='-COLManageInPatientAppointments-'),
@@ -260,7 +316,7 @@ while True:
         window[f'-COL{layout}-'].update(visible=True)
     elif event in ['Manage Patients', 'Manage Doctors', 'Manage OutPatient Appointments',
                    'Manage InPatient Appointments', 'Manage Diseases', 'Manage Treatments', 'Manage Rooms',
-                   'Manage Staff', 'Manage Room Assignments', 'Manage Bills', 'ViewNum']:
+                   'Manage Staff', 'Manage Room Assignments', 'Manage Bills', 'Manage Tables', 'ViewNum']:
         window[f'-COL{layout}-'].update(visible=False)
         layout = event.replace(' ', '')
         window[f'-COL{layout}-'].update(visible=True)
@@ -273,6 +329,114 @@ while True:
                     else:
                         window[f'{entry}Num'].update("Number of " + entry + ": " + str(res[entry]))
 
+    elif event in ['Patient', 'Doctor', 'Room', 'Staff', 'RoomAssignments', 'Disease', 'Treatment', 'Appointment',
+                   'Bill']:
+        print(event)
+        if values['Patient']:
+            res = patient.view_all()
+            window['-viewroomtable-'].update(visible=False)
+            window['idupdel'].update(visible=False)
+            window['-PRID-'].update(visible=False)
+            window['BtnUpdate'].update(visible=False)
+            window['BtnDelete'].update(visible=False)
+            window['uprcost'].update(visible=False)
+            window['uprcostinput'].update(visible=False)
+            window['BtnUpdateR'].update(visible=False)
+            window['-viewpatienttable-'].update(values=[list(ele) for ele in res], num_rows=len(res), visible=True)
+            window['idupdel'].update(visible=True)
+            window['-PRID-'].update(visible=True, value='')
+            window['BtnUpdate'].update(visible=True)
+            window['BtnDelete'].update(visible=True)
+        if values['Room']:
+            res = room.view_all()
+            window['-viewpatienttable-'].update(visible=False)
+            window['idupdel'].update(visible=False)
+            window['-PRID-'].update(visible=False)
+            window['BtnUpdate'].update(visible=False)
+            window['BtnDelete'].update(visible=False)
+            window['upheight'].update(visible=False)
+            window['upweight'].update(visible=False)
+            window['upheightinput'].update(visible=False)
+            window['upweightinput'].update(visible=False)
+            window['BtnUpdateP'].update(visible=False)
+            window['-viewroomtable-'].update(values=[list(ele) for ele in res], num_rows=len(res), visible=True)
+            window['idupdel'].update(visible=True)
+            window['-PRID-'].update(visible=True, value='')
+            window['BtnUpdate'].update(visible=True)
+            window['BtnDelete'].update(visible=True)
+    elif event == 'BtnUpdate':
+        if values['Patient']:
+            window['upheight'].update(visible=True)
+            window['upweight'].update(visible=True)
+            window['upheightinput'].update(visible=True)
+            window['upweightinput'].update(visible=True)
+            window['BtnUpdateP'].update(visible=True)
+        elif values['Room']:
+            window['uprcost'].update(visible=True)
+            window['uprcostinput'].update(visible=True)
+            window['BtnUpdateR'].update(visible=True)
+    elif event == 'BtnDelete':
+        # sg.popup_ok_cancel("Are you sure to delete it?", auto_close=False)
+        prid = values['-PRID-']
+        if len(prid) == 0:
+            window['updelerror'].update('Please enter ID.')
+        else:
+            if values['Patient']:
+                res = patient.delete_patient(prid)
+                if res:
+                    window['updelsuccess'].update('Deleted successfully..!!')
+                else:
+                    window['updelerror'].update("Couldn't delete the record")
+            elif values['Room']:
+                res = room.delete_room(prid)
+                if res:
+                    window['updelsuccess'].update('Deleted successfully..!!')
+                else:
+                    window['updelerror'].update("Couldn't delete the record")
+
+    elif event in ['BtnUpdateP', 'BtnUpdateR']:
+        height = values['upheightinput']
+        weight = values['upweightinput']
+        rcost = values['uprcostinput']
+        prid = values['-PRID-']
+        if len(prid) == 0:
+            window['updelerror'].update('Please enter ID.')
+        else:
+            if values['Patient']:
+                if len(height) == 0 and len(weight) == 0:
+                    window['updelerror'].update('Please enter height and weight.')
+                elif len(height) == 0:
+                    window['updelerror'].update('Please enter height.')
+                elif len(weight) == 0:
+                    window['updelerror'].update('Please enter weight.')
+                else:
+                    if not height.isdigit() and not weight.isdigit():
+                        window['updelerror'].update('Please enter valid height in cms and weight in pounds.')
+                    elif not height.isdigit():
+                        window['updelerror'].update('Please enter valid height in cms.')
+                    elif not weight.isdigit():
+                        window['updelerror'].update('Please enter valid weight in pounds.')
+                    else:
+                        window['updelerror'].update('')
+                        print(height, weight)
+                        res = patient.update_patient(float(height), float(weight), int(prid))
+                        if res:
+                            window['updelsuccess'].update('Updated successfully..!!')
+                        else:
+                            window['updelerror'].update("Couldn't update the record")
+            elif values['Room']:
+                if len(rcost) == 0:
+                    window['updelerror'].update('Please enter room cost.')
+                elif not rcost.isdigit():
+                    window['updelerror'].update('Please enter valid room cost.')
+                else:
+                    window['updelerror'].update('')
+                    print(rcost)
+                    res = room.update_room(float(rcost), int(prid))
+                    if res:
+                        window['updelsuccess'].update('Updated successfully..!!')
+                    else:
+                        window['updelerror'].update("Couldn't update the record")
     elif event in ['Back to Admin Menu', 'Back to Admin Menu0', 'Back to Admin Menu1', 'Back to Admin Menu2',
                    'Back to Admin Menu3', 'Back to Admin Menu4', 'Back to Admin Menu5', 'Back to Admin Menu6',
                    'Back to Admin Menu7', 'Back to Admin Menu8', 'Back to Admin Menu9']:
