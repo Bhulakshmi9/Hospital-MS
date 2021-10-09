@@ -17,6 +17,7 @@ layoutAdminLogin = [[sg.Button('Manage')],
                     [sg.Button('Administration')]]
 layoutManage = [[sg.Button('View Number of Records in each table', key='ViewNum')],
                 [sg.Button('Manage Tables')],
+                [sg.Button('Delete Column')],
                 # [sg.Button('Manage Patients')],
                 # [sg.Button('Manage Doctors')],
                 # [sg.Button('Manage OutPatient Appointments')],
@@ -192,6 +193,20 @@ layoutViewTreatmentsOrder = [
               alternating_row_color='black',
               key='-treatordertable-',
               row_height=25, visible=False)]]
+layoutDeleteColumn = [[sg.Table(values=viewroomdata, headings=viewroomhead,
+                                # max_col_width=25,
+                                background_color='black',
+                                auto_size_columns=True,
+                                # display_row_numbers=True,
+                                justification='right',
+                                num_rows=0,
+                                alternating_row_color='black',
+                                key='-viewroomdeltable-',
+                                row_height=25, visible=False)],
+                      [sg.Text('Deleting "Hospital Name" column from table Room')],
+                      [sg.Button('Go Ahead', key="yes"), sg.Button('Cancel')],
+                      [sg.Text(key='delcolerror', text_color='Red')],
+                      [sg.Text(key='delcolsuccess', text_color='Lightgreen')]]
 
 # user layouts
 layoutUser = [[sg.Text('Enter Username'), sg.Input(key='-InputUsernameLogin-')],
@@ -298,7 +313,8 @@ layout = [
      sg.Column(layoutViewPatInfoUser, visible=False, key='-COLViewPatInfoUser-'),
      sg.Column(layoutViewPatAgeUser, visible=False, key='-COLViewPatAgeUser-'),
      sg.Column(layoutViewTreatmentsOrder, visible=False, key='-COLViewTreatmentsOrder-'),
-     sg.Column(layoutViewNum, visible=False, key='-COLViewNum-')
+     sg.Column(layoutViewNum, visible=False, key='-COLViewNum-'),
+     sg.Column(layoutDeleteColumn, visible=False, key='-COLDeleteColumn-')
      ],
     [sg.Button('Main'), sg.Button('Exit')]]
 
@@ -316,7 +332,7 @@ while True:
         window[f'-COL{layout}-'].update(visible=True)
     elif event in ['Manage Patients', 'Manage Doctors', 'Manage OutPatient Appointments',
                    'Manage InPatient Appointments', 'Manage Diseases', 'Manage Treatments', 'Manage Rooms',
-                   'Manage Staff', 'Manage Room Assignments', 'Manage Bills', 'Manage Tables', 'ViewNum']:
+                   'Manage Staff', 'Manage Room Assignments', 'Manage Bills', 'Manage Tables', 'ViewNum', 'Delete Column']:
         window[f'-COL{layout}-'].update(visible=False)
         layout = event.replace(' ', '')
         window[f'-COL{layout}-'].update(visible=True)
@@ -328,6 +344,17 @@ while True:
                         window[f'{entry}Num'].update("Number of Room Assignments: " + str(res[entry]))
                     else:
                         window[f'{entry}Num'].update("Number of " + entry + ": " + str(res[entry]))
+        if event == 'Delete Column':
+            res = room.view_all()
+            window['-viewroomdeltable-'].update(values=[list(ele) for ele in res], num_rows=len(res), visible=True)
+    elif event == "yes":
+        res = room.delete_column()
+        if res:
+            window['delcolsuccess'].update('Deleted column successfully')
+            res = room.view_all()
+            window['-viewroomdeltable-'].update(values=[list(ele) for ele in res], num_rows=len(res), visible=True)
+        else:
+            window['delcolerror'].update('Column could not be deleted')
 
     elif event in ['Patient', 'Doctor', 'Room', 'Staff', 'RoomAssignments', 'Disease', 'Treatment', 'Appointment',
                    'Bill']:
@@ -422,6 +449,9 @@ while True:
                         res = patient.update_patient(float(height), float(weight), int(prid))
                         if res:
                             window['updelsuccess'].update('Updated successfully..!!')
+                            res = patient.view_all()
+                            window['-viewpatienttable-'].update(values=[list(ele) for ele in res], num_rows=len(res),
+                                                                visible=True)
                         else:
                             window['updelerror'].update("Couldn't update the record")
             elif values['Room']:
@@ -435,6 +465,9 @@ while True:
                     res = room.update_room(float(rcost), int(prid))
                     if res:
                         window['updelsuccess'].update('Updated successfully..!!')
+                        res = room.view_all()
+                        window['-viewroomtable-'].update(values=[list(ele) for ele in res], num_rows=len(res),
+                                                            visible=True)
                     else:
                         window['updelerror'].update("Couldn't update the record")
     elif event in ['Back to Admin Menu', 'Back to Admin Menu0', 'Back to Admin Menu1', 'Back to Admin Menu2',
