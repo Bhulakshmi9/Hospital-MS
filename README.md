@@ -196,10 +196,34 @@ self.cursor.execute(sql)
 
 ### I.) Update specific columns and/or fields
 
+ 1. Click 'Admin'
+ 2. Click 'Manage'
+ 3. Click 'Manage Tables'
+ 4. Select the Patient table
+ 5. Enter the Patient ID of the patient you wish to change and click 'Update'
+ 6. Enter the new height and weight for the patient and click 'Update'
 
+sql = "Update Patient SET height = %s, weight = %s WHERE patientID = %s" % (height, weight, pid)
+
+try:
+ cursor.execute(sql)
 
 ### J.) Drop specific columns and rows
+To Drop rows:
+ 1. Click 'Admin'
+ 2. Click 'Manage'
+ 3. Click 'Manage Tables'
+ 4. Select the Room table
+ 5. Enter the Room ID of the room you wish to delete and click 'Delete'
 
+sql = "DELETE FROM Room WHERE roomID = %s" % rid
+
+try:
+ cursor.execute(sql)
+
+
+To drop columns:
+ 1. 
 
 
 ### K.) Create users and provide different views
