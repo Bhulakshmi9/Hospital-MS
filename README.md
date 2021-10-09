@@ -336,10 +336,24 @@ cursor.execute(sql)
 
 ### M.) Backup the database
 
-
+  1. Click 'Admin'
+  2. Click 'Backup Database'
+ 
+import os
+import pipes
+DB_HOST = 'localhost'
+DB_USER = 'root'
+DB_USER_PASSWORD = credentials.PASSWORD
+DB_NAME = 'HospitalManagementSystem'
+BACKUP_Path = './'
+db = DB_NAME
+dumpcmd = "mysqldump -h " + DB_HOST + " -u " + DB_USER + " -p" + DB_USER_PASSWORD + " " + db + " > " + pipes.quote(BACKUP_Path) + "/" + db + ".sql"
+os.system(dumpcmd)
 
 ### N.) Import backed-up database
 
+$ cd /usr/local/mysql/bin
+$ ./mysql -u root -p < Path_To_File/HospitalManagementSystem.sql
 
 
 # Team
