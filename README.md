@@ -209,7 +209,7 @@ try:
  cursor.execute(sql)
 
 ### J.) Drop specific columns and rows
-To Drop rows:
+To drop rows:
  1. Click 'Admin'
  2. Click 'Manage'
  3. Click 'Manage Tables'
@@ -221,10 +221,13 @@ sql = "DELETE FROM Room WHERE roomID = %s" % rid
 try:
  cursor.execute(sql)
 
-
 To drop columns:
- 1. 
+ 1. Click 'Admin'
+ 2. Click 'Manage'
+ 3. Click 'Delete Column'
+ 4. Click 'Go Ahead' to delete the hospital name column from the Room table
 
+cursor.execute("ALTER TABLE Room DROP COLUMN hospitalName")
 
 ### K.) Create users and provide different views
 
