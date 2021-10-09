@@ -10,9 +10,55 @@ Prerequisites for this project include Python, Pycharm and MySQL Server.
 
 https://www.python.org/downloads/
 
+https://www.anaconda.com/products/individual
+
 https://www.jetbrains.com/pycharm/download/
 
 https://www.mysql.com/downloads/
+
+# Running the project
+
+## Step1
+Install MySQL, Anaconda, and PyCharm
+
+## Step2
+Open PyCharm and Create New Project. leave everything to default, except the interperter - make sure to select 'Conda' as interperter.
+
+## Step3
+Look for terminal in PyCharm, which will usually be a tab in output section, and click on it, and run the following commands.
+
+  ### Step3.1
+  Install PySimpleGUI for GUI by running following command:
+  $ pip3 install PySimpleGUI
+ 
+  In case, if doesnlt work, try using following command:
+  $ conda install -c conda-forge PySimpleGUI
+ 
+  ### Step3.2
+  Install mysql.connector for GUI by running following command:
+  $ pip3 install mysql.connector
+ 
+  ### Step3.3
+  Install mysql-connector-python for GUI by running following command:
+  $ pip3 install mysql-connector-python
+
+## Step4
+Download the project from https://github.com/Vijnathi/Hospital-Management-System, Click on Code and Download Zip
+
+## Step5
+Unzip the folder and open the folder in PyCharm.
+
+## Step6
+Open credentials.py file and enter your mysql root user's password
+
+## Step7
+Open main.py and right-click to choose Run 'main' to the run the program
+
+## Step8
+Choose pythonProject (it will be same if you left everything to default when the empty project was created) as you interpreter to run the project. If you don't do this, the project may not run properly as the libraries are installed in there.
+
+## Step9
+GUI lands and you should be good to explore. Following are some of the objectives, with functionalities of where you can find them on GUI.
 
 # Project Objectives
 
