@@ -1,20 +1,24 @@
 import PySimpleGUI as sg
 
-import common
 import db_init
+
+db_init.create()
+
+import backup
 import patient
 import room
 import user
 import login
 import treatment
-
-db_init.create()
+import common
 
 # ----------- Create the layouts this Window will display -----------
 layoutMain = [[sg.Button('Admin'), sg.Button('User')]]
 # layoutAdmin = [[sg.]]
 layoutAdminLogin = [[sg.Button('Manage')],
-                    [sg.Button('Administration')]]
+                    [sg.Button('Administration')],
+                    [sg.Button('Backup Database')],
+                    [sg.Text(key='backup', text_color='Lightgreen', font=('Helvetica', 15))]]
 layoutManage = [[sg.Button('View Number of Records in each table', key='ViewNum')],
                 [sg.Button('Manage Tables')],
                 [sg.Button('Delete Column')],
@@ -330,9 +334,13 @@ while True:
         window[f'-COL{layout}-'].update(visible=False)
         layout = event
         window[f'-COL{layout}-'].update(visible=True)
+    elif event == 'Backup Database':
+        backup.backup()
+        window['backup'].update('Database backed up successfully...!!')
     elif event in ['Manage Patients', 'Manage Doctors', 'Manage OutPatient Appointments',
                    'Manage InPatient Appointments', 'Manage Diseases', 'Manage Treatments', 'Manage Rooms',
-                   'Manage Staff', 'Manage Room Assignments', 'Manage Bills', 'Manage Tables', 'ViewNum', 'Delete Column']:
+                   'Manage Staff', 'Manage Room Assignments', 'Manage Bills', 'Manage Tables', 'ViewNum',
+                   'Delete Column']:
         window[f'-COL{layout}-'].update(visible=False)
         layout = event.replace(' ', '')
         window[f'-COL{layout}-'].update(visible=True)
@@ -467,7 +475,7 @@ while True:
                         window['updelsuccess'].update('Updated successfully..!!')
                         res = room.view_all()
                         window['-viewroomtable-'].update(values=[list(ele) for ele in res], num_rows=len(res),
-                                                            visible=True)
+                                                         visible=True)
                     else:
                         window['updelerror'].update("Couldn't update the record")
     elif event in ['Back to Admin Menu', 'Back to Admin Menu0', 'Back to Admin Menu1', 'Back to Admin Menu2',
