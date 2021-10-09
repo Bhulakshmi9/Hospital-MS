@@ -16,94 +16,128 @@ https://www.mysql.com/downloads/
 ### A.) Properties of all relations
 Relations in this database include:
 
+
 #### Patient
 Details on patients in the hospital, including:
- - Patient ID
- - first name
- - last name
- - birthday
- - gender
- - email
- - phone number
- - height
- - weight
- - address
- - SSN
 
-#### Doctor 
-Details on doctors in the hospital, including:
- - Doctor ID
- - first name
- - last name
- - birthday
- - gender
- - email
- - phone number
- - height
- - weight
- - address
- - hospital name
- - consultation cost
+Attribute | Null? | Keys | Others | Datatypes| Description
+--- | --- | --- | --- |--- |---
+patientID | Not Null | Primary Key | Auto Increment | Int | Unique ID of a Patient 
+firstName | Not Null |  |  |Varchar | First Name of a Patient  
+lastName | Not Null |  |  |Varchar| Last Name of a Patient
+birthDate | Not Null |  |  |Varchar| Patient's Birth Date
+gender | Not Null |  |  |Varchar| Patient's Gender
+email | Not Null |  |unique |Varchar| Patient's Email
+phoneNumber | Not Null |  |  | Varchar | Patient's Phone Number
+height |  |  |  |float| Patient's Height
+weight |  |  |  | float| Patient's Weight
+address | Not Null |  |  | Varchar| Patient's Address
+SSN | Not Null |  |  |Varchar| SSN of a patient
 
 #### Staff
-Details on all other staff in the hospital (such as nurses and ward boys), including:
- - Staff ID
- - first name
- - last name
- - birthday
- - gender
- - email
- - phone number
- - address
- - type (nurse, ward boy, etc.)
- - duties
+Details on staff in the hospital, including:
+
+Attribute | Null? | Keys | Others |Datatypes| Description
+--- | --- | --- | --- |--- |---
+staffID|Not Null|Primary Key|  Auto Increment|  Int|Staff's unique Id
+firstName|Not Null|    |  |Varchar|Staff's First Name
+lastName|  Not Null       |      |       |Varchar|Staff's Last Name
+birthDate|  Not Null|  |  |Varchar|Staff's Birth Date
+gender|  Not Null| | |Varchar|Staff's Gender
+email|  Not Null  |      |unique|  Varchar|Staff's Email Id
+phoneNumber|  Not Null| ||Varchar  |Staff's Phone Number
+address|  Not Null|  | |Varchar|Staff;s Address
+SSN |  Not Null|       |         |Varchar|Staff's  Ssn
+type|  Not Null|  |           |Varchar|Staff Type
+duties|  |     |      |Varchar|Staff's Duties
+
+
+#### Doctor
+Details on Doctors in the hospital, including:
+ 
+ Attribute | Null? | Keys | Others |Datatypes| Description
+--- | --- | --- | --- |--- |---
+doctorID |Not Null|Primary Key  |    Auto Increment|  Int|Doctor's Unique Id
+firstName|  Not Null|  |             |Varchar|Doctor's First Name
+lastName|  Not Null|        |      |Varchar|Doctor's Last Name
+birthDate|  Not Null|    |   |  Varchar|Doctor's Birth Date 
+gender|  Not Null|       |        |Varchar|Doctor's Gender
+email|  Not Null |       |unique|  Varchar|Doctor's email Id
+phoneNumber  |Not Null|         |       |Varchar|Doctor's Phone Number
+weight|         |         |  |float|Doctor's Weight
+heigt|          |  |     |  float|Doctor's Height 
+address  |Not Null  |     |   |Varchar|Doctor;s Address
+hospitalName|       |       |         |Varchar|Name of The Hospital     
+consultationCost|  Not Null|       |         |Varchar|Cost For Consultation  
+
 
 #### Room
-Details on all rooms in the hospital, including:
- - Room ID
- - name
- - type (ICU, Operating Theater, etc.)
- - description
- - hospital name
- - room cost
+Details on Rooms in the hospital, including:
 
-#### RoomAssignments
-Junction table for assigning staff to rooms:
-  - Staff ID
-  - Room ID
+Attribute | Null? | Keys | Others |Datatypes| Description
+--- | --- | --- | --- |--- |---
+roomID|  Not Null|  Primary Key|  Auto Increment|  Int|Unique Id of a Roomm 
+roomName|  Not Null|         |     |  Varchar|Name of The Room
+type|  Not Null|       |       |  Varchar|Type Of The Room
+roomDescription|        |     |       |  Varchar|Description Of The Room
+hospitalName|         |       |     |  Varchar|Name Of The Hospital
+roomCost|  Not Null|        |       |Varchar|Cost Of The Room
+
+
+Attribute | Null? | Keys | Others |Datatypes| Description
+--- | --- | --- | --- |--- |---
+staffID|  NOT NULL|  Primary Key,FOREIGN KEY|        |Int|Id For Staff
+roomID|  NOT NULL|  Primary Key,FOREIGN KEY|        |Int|Id For Room 
 
 #### Disease
-Details on diseases, including:
- - Disease ID
- - name
- - description
- - symptoms
- - death rate
+Details on diseasess in the hospital, including:
+
+Attribute | Null? | Keys | Others |Datatypes| Description
+--- | --- | --- | --- |--- |---
+diseaseID|  NOT NULL| Primary Key| Auto Increment  |Int|Unique Id Of Disease
+diseaseName|  NOT NULL|  |       |  Varchar|Name Of The Disease
+diseaseDescription|  |            |  |Varchar|  Description For Disease   
+symptoms|  |      |  |Varchar|Symptom's Of Disease
+deathRate |  |         |  |Varchar|Death Rate OF Disease
+
 
 #### Treatment
-Details on treatments for diseases, including:
- - Treatment ID
- - name
- - description
- - treatment cost
- - Disease ID
+Details on Treatment in the hospital, including:
 
-#### Appointment
-Appointments made between doctors and patients:
- - Appointment ID
- - Patient ID
- - Doctor ID
- - Disease ID
- - Room ID
- - start date
- - end date
+Attribute | Null? | Keys | Others |Datatypes| Description
+--- | --- | --- | --- |--- |---
+treatmentID|NOT NULL|  Primary Key|  Auto Increment|  Int|unique Id of a Treatment
+treatmentName |  NOT NULL|    |      |Varchar|Treatment's Name
+treatmentDescription|  NULL|        |       |Varchar|Description For Treatment
+treatmentCost|  NULL|       |  |Varchar|Treatment;s Cost
+diseaseID|    |Foreign Key|    |Varchar|Treatment's Disease Id
+
+
+### Appointment
+Details on Appointment in the hospital, including:
+
+Attribute | Null? | Keys | Others |Datatypes| Description
+--- | --- | --- | --- |--- |---
+appointmentID| NOT NULL|  Primary Key|  Auto Increment|  Int|Unique Id Of Appointment
+patientID|  NOT NUL| Foreign Key|         |Int|Id For Patient
+doctorID | NOT NUL|  Foreign Key |         |Int|Id For Doctor
+diseaseID|  NOT NULL | Foreign Key|    |Int|Id For Disease    
+roomID|      |  Foreign Key|         |Int|Id For Room
+type|  NOT NUL|            |  |Varchar|Type Of Appointment
+startDate|  NOT NUL|         |     |Date |  Appointment Start Date   
+endDate|    |     |  | Date  | Appointment End Date  
 
 #### Bill
-Details on appointment bill, including:
- - Bill ID
- - Appointment ID
- - Disease ID
- - amount
+Details on Billss in the hospital, including:
+
+Attribute | Null? | Keys | Others | Datatypes | Description
+--- | --- | --- | --- |--- |---
+billID | NOT NULL | Primary Key | Auto Increment | Int | Unique ID of a Bill 
+appointmentID | NOT NULL | Foreign Key |  | Int |Id For Appointment     
+patientID | NOT NULL | Foreign Key |  | Int | Id For patient 
+diseaseID | NOT NULL | Foreign Key |  | Int | Id For Disease 
+Amount |  |  |  | Float | Total Cost For Treatment And Number Of Days
+
 
 ### B.) Select specific rows and columns
 
