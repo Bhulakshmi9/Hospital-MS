@@ -3,7 +3,7 @@ A small project created for the CSC785: Info Storage & Retrieval master's course
 
 # ER Diagram
 
-![alt text](https://github.com/Vijnathi/Hospital-Management-System/blob/master/HMS-Final-ER.png)
+![alt text](https://github.com/Vijnathi/Hospital-Management-System/blob/master/HMS-ER.png)
 
 # Prerequisites
 Prerequisites for this project include Python, Pycharm and MySQL Server.
