@@ -28,7 +28,8 @@ class Login:
                   "JOIN Disease d ON d.diseaseID = a.diseaseID " \
                   "JOIN Treatment t ON d.diseaseID = t.diseaseID " \
                   "JOIN Room r ON r.roomID = a.roomID WHERE (a.type = 'outpatient' and startDate >= %s) or " \
-                  "(a.type = 'inpatient' and endDate is NULL and startDate >= %s)" % ("'"+date+"'", "'"+date+"'")
+                  "(a.type = 'inpatient' and endDate is NULL and startDate >= %s)" % (
+                  "'" + date + "'", "'" + date + "'")
             self.cursor.execute(sql)
             res = self.cursor.fetchall()
             return res, "success"
@@ -36,6 +37,7 @@ class Login:
             print("Error")
             return [], "error"
 
+    # viewing staff based on room number
     def view_rooms(self, num):
         try:
             sql = "SELECT concat(firstName, ' ', lastName) as fullName, email, phoneNumber FROM Staff WHERE staffID IN (SELECT staffID FROM RoomAssignments WHERE roomID = %s)" % num
