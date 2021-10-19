@@ -769,7 +769,7 @@ while True:
         # view
         if event == 'ViewAppUser':
             res, mess = login.Login(values['-InputUsernameLogin-'], values['-InputPasswordLogin-']).view_appointments(
-                '2021-10-07')
+                '2021-10-03')
             if mess == 'error':
                 window['-mess-'].update('User does not have view permissions', text_color='Red')
             else:

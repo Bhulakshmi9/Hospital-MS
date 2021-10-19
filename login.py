@@ -27,9 +27,9 @@ class Login:
                   "JOIN Patient p  ON p.patientID  = a.patientID " \
                   "JOIN Disease d ON d.diseaseID = a.diseaseID " \
                   "JOIN Treatment t ON d.diseaseID = t.diseaseID " \
-                  "JOIN Room r ON r.roomID = a.roomID WHERE (a.type = 'outpatient' and startDate >= %s) or " \
-                  "(a.type = 'inpatient' and endDate is NULL and startDate >= %s)" % (
-                  "'" + date + "'", "'" + date + "'")
+                  "JOIN Room r ON r.roomID = a.roomID WHERE (a.type = 'outpatient' and a.startDate >= %s) or " \
+                  "(a.type = 'inpatient' and a.endDate is NULL and a.startDate >= %s)" % (
+                      "'" + date + "'", "'" + date + "'")
             self.cursor.execute(sql)
             res = self.cursor.fetchall()
             return res, "success"
