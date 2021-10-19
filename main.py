@@ -114,8 +114,8 @@ layoutAddNewUser = [
     [sg.Text(key='-AddUserError-', text_color='Red', font=('Helvetica', 15))],
     [sg.Text(key='-AddUserSuccess-', text_color='Lightgreen', font=('Helvetica', 15))],
     [sg.Button('Back to Administration', key='backtoadminis', font=('Helvetica', 15), button_color='FireBrick')]]
-layoutDropUser = [[sg.Text('Enter Username'), sg.Input(key='-InputUsernameDrop-')],
-                  [sg.Button('Drop')],
+layoutDropUser = [[sg.Text('Enter Username', font=('Helvetica', 15)), sg.Input(key='-InputUsernameDrop-', font=('Helvetica', 15))],
+                  [sg.Button('Drop', font=('Helvetica', 15))],
                   [sg.Text(key='-DropUserError-', text_color='Red', font=('Helvetica', 15))],
                   [sg.Text(key='-DropUserSuccess-', text_color='Lightgreen', font=('Helvetica', 15))],
                   [sg.Button('Back to Administration', key='backtoadminis1', font=('Helvetica', 15),
@@ -590,6 +590,37 @@ while True:
         window[f'-COL{layout}-'].update(visible=False)
         layout = event.replace(' ', '')
         window[f'-COL{layout}-'].update(visible=True)
+        if event == 'Add New User':
+            window['-InputUsername-'].update('')
+            window['-InputPassword-'].update('')
+            window['-AddUserError-'].update('')
+            window['-AddUserSuccess-'].update('')
+        if event == 'Drop User':
+            window['-InputUsernameDrop-'].update('')
+            window['-DropUserError-'].update('')
+            window['-DropUserSuccess-'].update('')
+        if event == 'Grant Permissions':
+            window['-InputUsernameGrant-'].update('')
+            window['-AP-'].reset_group()
+            window['-SELECT-'].update(value=False)
+            window['-INSERT-'].update(value=False)
+            window['-DROP-'].update(value=False)
+            window['-CREATE-'].update(value=False)
+            window['-DELETE-'].update(value=False)
+            window['-UPDATE-'].update(value=False)
+            window['-GRANTOPTION-'].update(value=False)
+            window['-AT-'].reset_group()
+            window['-Patient-'].update(value=False)
+            window['-Doctor-'].update(value=False)
+            window['-Room-'].update(value=False)
+            window['-Staff-'].update(value=False)
+            window['-RoomAss-'].update(value=False)
+            window['-Disease-'].update(value=False)
+            window['-Treatment-'].update(value=False)
+            window['-Appointment-'].update(value=False)
+            window['-Bill-'].update(value=False)
+            window['-GrantError-'].update('')
+            window['-GrantSuccess-'].update('')
     elif event == 'Add User':
         username = values['-InputUsername-']
         password = values['-InputPassword-']
